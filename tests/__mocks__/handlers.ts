@@ -51,5 +51,13 @@ export const handlers = [
     const data = (await request.json()) as object;
     return HttpResponse.json(db.wallets.update({ data, where: { id: { equals: idNumber } } }));
   }),
+  http.post(`${process.env.SUPABASE_URL}/rest/v1/wallets*`, async ({ request }) => {
+    const url = new URL(request.url);
+    const id = url.searchParams.get("id") ?? url.searchParams.get("wallet_id");
+
+    if (!id) {
+      return HttpResponse.text("", { status: 400 });
+    }
+  }),
   http.post("https://api.github.com/repos/:owner/:repo/issues/:id/comments", () => HttpResponse.json()),
 ];
